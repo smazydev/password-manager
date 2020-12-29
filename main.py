@@ -1,6 +1,7 @@
 from tkinter import *
 from tkinter import messagebox
 from random import choice,randint,shuffle
+import json
 
 
 #---------------------------------- PASSWORD GENERATOR -------------------------- #
@@ -29,11 +30,33 @@ def generate_password():
 
 #---------------------------------- SAVE PASSWORD TO FILE -------------------------- #
 def save_credentials_to_file():
+    website_entry_data = website_entry.get()
+    email_entry_data = email_entry.get()
+    password_entry_data = password_entry.get()
 
-    with open("data.txt",mode="a") as data_file:
-        data_file.write(f"{website_entry.get()} | {email_entry.get()} | {password_entry.get()}\n")
-        website_entry.delete(0,END)
-        password_entry.delete(0,END)
+    credentials_dict = {
+        website_entry_data: {
+            "email": email_entry_data,
+            "password": password_entry_data,
+        }
+    }
+
+    if len(website_entry_data) == 0 or len(password_entry_data) == 0:
+        messagebox.showinfo(title="Oops", message="Please make sure you haven't left any fields empty.")
+    else:
+        try:
+            with open("data.json",mode="r") as data_file:
+                data = json.load(data_file)
+        except FileNotFoundError:
+            with open("data.json",mode="w") as data_file:
+                json.dump(credentials_dict,data_file,indent=4)
+        else:
+            data.update(credentials_dict)
+            with open("data.json",mode="w") as data_file:
+                json.dump(data,data_file,indent=4)
+        finally:
+                website_entry.delete(0,END)
+                password_entry.delete(0,END)
 
 #---------------------------------- UI SETUP -------------------------- #
 
@@ -69,6 +92,7 @@ generate_password_button = Button(text="Generate Password",command=generate_pass
 generate_password_button.grid(row=3,column=2)
 add_button = Button(text="Add",width=36,command=save_credentials_to_file)
 add_button.grid(row=4,column=1,columnspan=2)
+
 
 
 
