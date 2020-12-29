@@ -4,10 +4,16 @@ from tkinter import *
 
 #---------------------------------- PASSWORD GENERATOR -------------------------- #
 
+def password_generator():
+    pass
+
+
 #---------------------------------- SAVE PASSWORD TO FILE -------------------------- #
 def save_credentials_to_file():
     with open("data.txt",mode="a") as data_file:
         data_file.write(f"{website_entry.get()} | {email_entry.get()} | {password_entry.get()}\n")
+        website_entry.delete(0,END)
+        password_entry.delete(0,END)
 
 #---------------------------------- UI SETUP -------------------------- #
 
