@@ -4,6 +4,21 @@ from random import choice,randint,shuffle
 import json
 
 
+
+#---------------------------------- PASSWORD GENERATOR -------------------------- #
+def search_credentials():
+    search_query = str(website_entry.get())
+    with open("data.json",mode="r") as data_file:
+        data = json.load(data_file)
+        try:
+            final_data = data[search_query]
+        except KeyError:
+            messagebox.showerror(title="Key Error",message=f"the credentials for {search_query} do not exist! Please enter a valid query")
+        messagebox.showinfo(title="Requested Credentials",
+                           message=f"Here are your credentials\n email: {final_data['email']}\n password: {final_data['password']}")
+
+
+
 #---------------------------------- PASSWORD GENERATOR -------------------------- #
 
 def generate_password():
@@ -92,7 +107,8 @@ generate_password_button = Button(text="Generate Password",command=generate_pass
 generate_password_button.grid(row=3,column=2)
 add_button = Button(text="Add",width=36,command=save_credentials_to_file)
 add_button.grid(row=4,column=1,columnspan=2)
-
+search_button = Button(text="Search Credentials",command=search_credentials)
+search_button.grid(row=1,column=2)
 
 
 
